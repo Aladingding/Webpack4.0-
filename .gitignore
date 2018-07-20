@@ -1,0 +1,16 @@
+﻿node_modules/
+build/
+npm-debug.log
+resouse/dontup/
+参考文件
+.idea
+.svn
+.idea
+
+.cache/
+clife-sleep-monitor/development/
+clife-sleep-monitor/production/
+clife-sleep-monitor/source/build/
+
+.vscode
+.idea
