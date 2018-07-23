@@ -16,6 +16,7 @@ module.exports = {
     },
     output: {
         filename: '[name].[chunkhash].js',
+        chunkFilename:'[id].[chunkhash].chunk.js',
         path: path.resolve(__dirname,'./app/source/build/'),
     },
     stats: {
@@ -105,31 +106,32 @@ module.exports = {
                 // 排除查找模块的目录
                 use: {
                     loader: 'babel-loader',
-                    options: {
-                        //presets: ['@babel/preset-react'],
-                        // presets: [['es2015', {modules: false}]],
-                        // plugins: ['syntax-dynamic-import']
-
-                        //presets: [['es2015', {modules: false}]],
-
-                        // presets:[
-                        //     "stage-1",
-                        //     "react"
-                        // ],
-                        //"presets": ["@babel/preset-env","react"],
-                        "presets": ["@babel/preset-env","@babel/preset-react"],
-                        // "presets": [
-                        //     ["es2015", {"loose": true}],
-                        //     "stage-1",
-                        //     "react"
-                        // ],
-                        plugins: [
-                            'syntax-dynamic-import',
-                            'transform-async-to-generator',
-                            'transform-regenerator',
-                            'transform-runtime'
-                        ]
-                    }
+                    // options: {
+                    //     //presets: ['@babel/preset-react'],
+                    //     // presets: [['es2015', {modules: false}]],
+                    //     // plugins: ['syntax-dynamic-import']
+                    //
+                    //     //presets: [['es2015', {modules: false}]],
+                    //
+                    //     // presets:[
+                    //     //     "stage-1",
+                    //     //     "react"
+                    //     // ],
+                    //     //"presets": ["@babel/preset-env","react"],
+                    //
+                    //     // "presets": ["@babel/preset-env","@babel/preset-react"],
+                    //     // // "presets": [
+                    //     // //     ["es2015", {"loose": true}],
+                    //     // //     "stage-1",
+                    //     // //     "react"
+                    //     // // ],
+                    //     // plugins: [
+                    //     //     'syntax-dynamic-import',
+                    //     //     'transform-async-to-generator',
+                    //     //     'transform-regenerator',
+                    //     //     'transform-runtime'
+                    //     // ]
+                    // }
                 },
                 // options: {
                 //     presets: ['@babel/preset-react'],

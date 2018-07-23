@@ -1,0 +1,5 @@
+{
+  // "plugins": ["transform-runtime","dynamic-import-node"],
+  "plugins": ["@babel/plugin-transform-runtime","dynamic-import-node","syntax-dynamic-import"],
+  "presets": ["@babel/preset-env","@babel/preset-react"]
+}
