@@ -1,9 +1,10 @@
 import React  from 'react';
 import ReactDOM from 'react-dom';
+import { render } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom';
-import App from '../components/App.js';
-import A from './a.js';
-import B from './b.js';
+import App from 'components/App.js';
+// import A from './a.js';
+// import B from './b.js';
 
 // document.getElementById('container');
 // //
@@ -11,10 +12,10 @@ import B from './b.js';
 // B();
 // container.innerHTML = 1111;
 
-ReactDOM.render((
+render((
     <BrowserRouter>
         <App />
     </BrowserRouter>
-), document.getElementById('container'));
+), document.getElementById('root'));
 
 

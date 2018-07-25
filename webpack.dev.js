@@ -17,29 +17,46 @@ const dllchunkname = manifest.name.split('_')[1];
 
 module.exports = {
     mode: 'development',
-    devtool: "eval-source-map",
+    devtool: "source-map",//eval-source-map
     stats: {
         colors: true,
         version: true,
     },
     entry:{
-        index: path.resolve(__dirname,'./app/source/entry/index.js'),
+        // index: path.resolve(__dirname,'./app/source/entry/index.js'),
+        index: [
+            'babel-polyfill',
+            path.resolve(__dirname, './app/source/entry/index.js')
+        ]
     },
     output: {
         filename: '[name].[hash].js',
+        chunkFilename: "[name]-chunk.js",
         path: path.resolve(__dirname,'./app/source/build/'),
         publicPath: "/"
     },
     devServer:{
-        //quiet:true, // true,关闭编译控制台打印，世界一下子安静了
-        clientLogLevel: "none",
+        quiet: false, // true,关闭编译控制台打印，世界一下子安静了
+        // clientLogLevel: "none",
         // contentBase本地服务器所加载的页面所在的目录,这个好坑哦，这个很重要，配置不对的话，是找不到资源文件的
         contentBase: path.resolve(__dirname,'./app/source/build'),
-        disableHostCheck: true,
+        // disableHostCheck: true,
         port: 8070,
         hot: true, // 需要开启 plugins > new webpack.HotModuleReplacementPlugin()
         inline: true, // 实时刷新 设置为true，当源文件改变时会自动刷新页面
         historyApiFallback: true, // 不跳转
+    },
+    //自动补全识别后缀
+    resolve: {
+        extensions: ['.js', '.jsx', '.json'],
+        alias: {
+            components: path.resolve(__dirname, './app/source/components'),
+            // commonjsx: path.resolve(__dirname, '../src/commonjsx'),
+            // common: path.resolve(__dirname, '../src/assets/common'),
+            // popup: path.resolve(__dirname, '../src/assets/common/lib/popup/popup.js'),
+            pages: path.resolve(__dirname, './app/source/pages'),
+            // actions: path.resolve(__dirname, '../src/redux/actions')
+        },
     },
     plugins: [
         // new CleanWebpackPlugin([
@@ -90,11 +107,12 @@ module.exports = {
                     // options: {
                     //     presets: ['@babel/preset-react']
                     // }
-                    options: {
-                        presets: ['@babel/preset-react'],
-                        plugins: ['syntax-dynamic-import']
-                    }
+                    // options: {
+                    //     presets: ['@babel/preset-react'],
+                    //     plugins: ['syntax-dynamic-import']
+                    // }
                 },
+
                 // options: {
                 //     presets: ['@babel/preset-react'],
                 //     //plugins: ['@babel/plugin-transform-runtime']
@@ -111,6 +129,16 @@ module.exports = {
                     { loader: 'style-loader' },
                     { loader: 'css-loader?modules' },
                 ]
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // 将 JS 字符串生成为 style 节点
+                }, {
+                    loader: "css-loader" // 将 CSS 转化成 CommonJS 模块
+                }, {
+                    loader: "sass-loader" // 将 Sass 编译成 CSS
+                }]
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,

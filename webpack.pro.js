@@ -11,12 +11,18 @@ const dllchunkname = manifest.name.split('_')[1];
 module.exports = {
     mode: 'production',
     entry:{
-        index: path.resolve(__dirname,'./app/source/entry/index.js'),
+        // index: path.resolve(__dirname,'./app/source/entry/index.js'),
         // index2 : path.resolve(__dirname,'./app/source/entry/index2.js'),
+        index: [
+            'babel-polyfill',
+            path.resolve(__dirname, './app/source/entry/index.js')
+        ]
     },
     output: {
         filename: '[name].[chunkhash].js',
-        chunkFilename:'[id].[chunkhash].chunk.js',
+        //chunkFilename:'[id].[chunkhash].chunk.js',
+        // https://blog.csdn.net/qq_35534823/article/details/79406995
+        chunkFilename: "[name]-chunk.js",
         path: path.resolve(__dirname,'./app/source/build/'),
     },
     stats: {
@@ -84,19 +90,30 @@ module.exports = {
             // chunks: 表示显示块的范围，有三个可选值：initial(初始块)、async(按需加载块)、all(全部块)，默认为all
             cacheGroups: {
                 // 需要缓存的公共模块
-                commons: {
+                vendors: {
                     //  https://blog.csdn.net/github_36487770/article/details/80228147
                     // 抽离从node_modules文件夹中引入的模块为一个单独的模块，比如lodash
                     // test: /[\\/]node_modules[\\/]/,
                     // 抽离出来公共模块的名称，文件名
                     name: 'commons',//'commons',
                     // async 对异步加载的模块，抽离重复引用,all 对所有chunks抽离公共组件 ,initial 初始模块
-                    chunks: 'all',
+                    chunks: 'async',
                     // 分割的最小颗粒度，超过两个文件引入同一模块，才抽离该模块为公共组件
-                    minChunks: 2
+                    minChunks: 1
                 }
             }
         }
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json'],
+        alias: {
+            components: path.resolve(__dirname, './app/source/components'),
+            // commonjsx: path.resolve(__dirname, '../src/commonjsx'),
+            // common: path.resolve(__dirname, '../src/assets/common'),
+            // popup: path.resolve(__dirname, '../src/assets/common/lib/popup/popup.js'),
+            pages: path.resolve(__dirname, './app/source/pages'),
+            // actions: path.resolve(__dirname, '../src/redux/actions')
+        },
     },
     module:{
         rules:[
@@ -106,37 +123,11 @@ module.exports = {
                 // 排除查找模块的目录
                 use: {
                     loader: 'babel-loader',
-                    // options: {
-                    //     //presets: ['@babel/preset-react'],
-                    //     // presets: [['es2015', {modules: false}]],
-                    //     // plugins: ['syntax-dynamic-import']
-                    //
-                    //     //presets: [['es2015', {modules: false}]],
-                    //
-                    //     // presets:[
-                    //     //     "stage-1",
-                    //     //     "react"
-                    //     // ],
-                    //     //"presets": ["@babel/preset-env","react"],
-                    //
-                    //     // "presets": ["@babel/preset-env","@babel/preset-react"],
-                    //     // // "presets": [
-                    //     // //     ["es2015", {"loose": true}],
-                    //     // //     "stage-1",
-                    //     // //     "react"
-                    //     // // ],
-                    //     // plugins: [
-                    //     //     'syntax-dynamic-import',
-                    //     //     'transform-async-to-generator',
-                    //     //     'transform-regenerator',
-                    //     //     'transform-runtime'
-                    //     // ]
-                    // }
+                    options: {
+                        "presets": ["@babel/preset-env","@babel/preset-react"],
+                        "plugins": ["syntax-dynamic-import"]
+                    }
                 },
-                // options: {
-                //     presets: ['@babel/preset-react'],
-                //     //plugins: ['@babel/plugin-transform-runtime']
-                // }
             },
             {
                 test: /\.css$/,
@@ -144,6 +135,16 @@ module.exports = {
                     { loader: 'style-loader' },
                     { loader: 'css-loader?modules' },
                 ]
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // 将 JS 字符串生成为 style 节点
+                }, {
+                    loader: "css-loader" // 将 CSS 转化成 CommonJS 模块
+                }, {
+                    loader: "sass-loader" // 将 Sass 编译成 CSS
+                }]
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,

@@ -17,7 +17,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 module.exports = {
     mode: "development",
     entry: {
-        vendor: ['react', 'react-dom', 'react-router','axios']
+        vendor: ['react', 'react-dom', 'react-router','react-router-dom','axios','react-loadable']
     },
     output: {
         filename: '[name].dll.[chunkhash].js',
