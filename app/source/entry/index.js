@@ -12,10 +12,8 @@ import App from 'components/App.js';
 // B();
 // container.innerHTML = 1111;
 
-render((
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
-), document.getElementById('root'));
+render(<BrowserRouter>
+    <App />
+</BrowserRouter>, document.getElementById('root'));
 
 

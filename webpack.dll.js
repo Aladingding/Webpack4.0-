@@ -23,6 +23,7 @@ module.exports = {
         filename: '[name].dll.[chunkhash].js',
         library: '[name]_[chunkhash]', // dll文件内的name名称命名规则，映射关系，与下文DllPlugin.name对应
         path: path.join(__dirname, './app/source/build/'),
+        // path: path.join(__dirname, 'dist'),
     },
     plugins:[
         new CleanWebpackPlugin([

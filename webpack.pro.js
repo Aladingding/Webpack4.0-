@@ -5,25 +5,27 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const manifest = require('./app/source/build/vendor.manifest.json');
 const dllchunkname = manifest.name.split('_')[1];
 
 module.exports = {
     mode: 'production',
     entry:{
-        // index: path.resolve(__dirname,'./app/source/entry/index.js'),
+        index: path.resolve(__dirname,'./app/source/entry/index.js'),
         // index2 : path.resolve(__dirname,'./app/source/entry/index2.js'),
-        index: [
-            'babel-polyfill',
-            path.resolve(__dirname, './app/source/entry/index.js')
-        ]
+        // index: [
+        //     'babel-polyfill',
+        //     path.resolve(__dirname, './app/source/entry/index.js')
+        // ]
     },
     output: {
         filename: '[name].[chunkhash].js',
-        //chunkFilename:'[id].[chunkhash].chunk.js',
+        chunkFilename: '[name].chunk.js',
         // https://blog.csdn.net/qq_35534823/article/details/79406995
-        chunkFilename: "[name]-chunk.js",
         path: path.resolve(__dirname,'./app/source/build/'),
+        // 文件资源查找目录很重要
+        publicPath: "./"
     },
     stats: {
         colors: true,
@@ -43,6 +45,9 @@ module.exports = {
             inject: 'true',// 资源文件注入位置true,body,header,false
             vendor: /*manifest.name*/'vendor.dll.'+dllchunkname + '.js' //manifest就是dll生成的json
         }),
+        // new CopyWebpackPlugin({
+        //
+        // }),
         // new HtmlWebpackIncludeAssetsPlugin({
         //     file:['./app/source/build/vendor.dll.*.js'],
         //     assets: [
@@ -72,9 +77,7 @@ module.exports = {
     // https://blog.csdn.net/connie_0217/article/details/79760054
     // 需要多入口引入的才会抽离业务公共包？
 
-
     // https://blog.csdn.net/connie_0217/article/details/79760054
-
 
     // https://blog.csdn.net/qq_26733915/article/details/79458533
     // https://blog.csdn.net/qq_26733915/article/details/79458533
@@ -85,25 +88,25 @@ module.exports = {
 
 
     // https://www.cnblogs.com/ufex/p/8758792.html
-    optimization: {
-        splitChunks: {
-            // chunks: 表示显示块的范围，有三个可选值：initial(初始块)、async(按需加载块)、all(全部块)，默认为all
-            cacheGroups: {
-                // 需要缓存的公共模块
-                vendors: {
-                    //  https://blog.csdn.net/github_36487770/article/details/80228147
-                    // 抽离从node_modules文件夹中引入的模块为一个单独的模块，比如lodash
-                    // test: /[\\/]node_modules[\\/]/,
-                    // 抽离出来公共模块的名称，文件名
-                    name: 'commons',//'commons',
-                    // async 对异步加载的模块，抽离重复引用,all 对所有chunks抽离公共组件 ,initial 初始模块
-                    chunks: 'async',
-                    // 分割的最小颗粒度，超过两个文件引入同一模块，才抽离该模块为公共组件
-                    minChunks: 1
-                }
-            }
-        }
-    },
+    // optimization: {
+    //     splitChunks: {
+    //         // chunks: 表示显示块的范围，有三个可选值：initial(初始块)、async(按需加载块)、all(全部块)，默认为all
+    //         cacheGroups: {
+    //             // 需要缓存的公共模块
+    //             vendors: {
+    //                 //  https://blog.csdn.net/github_36487770/article/details/80228147
+    //                 // 抽离从node_modules文件夹中引入的模块为一个单独的模块，比如lodash
+    //                 // test: /[\\/]node_modules[\\/]/,
+    //                 // 抽离出来公共模块的名称，文件名
+    //                 name: 'ensure',// 'commons',
+    //                 // async 对异步加载的模块，抽离重复引用,all 对所有chunks抽离公共组件 ,initial 初始模块
+    //                 chunks: 'async',
+    //                 // 分割的最小颗粒度，超过两个文件引入同一模块，才抽离该模块为公共组件
+    //                 minChunks: 1
+    //             }
+    //         }
+    //     }
+    // },
     resolve: {
         extensions: ['.js', '.jsx', '.json'],
         alias: {
